@@ -1,0 +1,47 @@
+
+
+function sum(const x: integer, const y: integer) -> integer {
+	return x + y;
+}
+
+function test() -> func_type {
+	return sum;
+}
+                           
+function main() -> void {
+	
+	let x: integer = 10;
+	let y: integer = ~5;
+
+
+	const s: integer = sum(x, y);
+	
+	if (s == 0)
+		return;
+
+	if (s > 0) 
+		for (let i: integer = 0; i < sum(i, y); i = i + 1) 
+			printf("%d", i);
+	else {
+		let str: string = "";
+
+		while (str.size < s) {
+			let temp: string;
+			scanf("%s", temp);
+			str = str + temp;
+		}
+
+		printf("%s\n", str);
+	}
+
+	let x: array = [1, 2, 3];
+	let y: object = { "hi" : 1, [x, y]: 0 };
+	y[sum(x, y)] = 5;
+	y[[x, y]] = [x, y];
+	y[sum] = sum;
+	y[sum]();
+
+	(1 + 1) * 3;
+}
+
+main();

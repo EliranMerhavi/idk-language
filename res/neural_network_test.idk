@@ -1,0 +1,260 @@
+
+function dot(const x: array, const y: array) -> float
+{
+	let res: float = 0;
+	
+	for (let i: int = 0; i < x.length; i = i + 1)
+	{
+		res = res + x[i] * y[i];
+	}
+
+	return res;
+}
+
+function init_layer(const input_len: int, 
+					const output_len: int,
+					const a_func: func_type) -> object
+{
+	const layer: object = {
+		"weights": [[0.0] * input_len] * output_len,
+		"biases":  [0.0] * output_len,
+		"input_len": input_len,
+		"output_len": output_len,
+		"a_func": a_func
+	};
+	
+	"need to init weights and biases to random values";
+
+	for (let i: int = 0; i < output_len; i = i + 1)
+	{
+		layer["biases"][i] = (rand() + 0.0) / RAND_MAX;
+		for (let j: int = 0; j < input_len; j = j + 1)
+		{
+			layer["weights"][i][j] = (rand() + 0.0) / RAND_MAX;
+		}
+	}
+
+
+	return layer;
+}
+
+function activate_layer(const layer: object, const input_layer: array) -> array
+{
+	const output: array = [0.0] * layer["output_len"];
+
+	for (let i: int = 0; i < layer["output_len"]; i = i + 1)
+	{
+		output[i] = layer["a_func"](dot(input_layer, layer["weights"][i])) + layer["biases"][i];
+	}
+	
+	return output;
+}
+
+function init_network(const input_len: int, const learning_rate: float) -> object
+{
+	return {
+		"layers": [],
+		"input_len": input_len,
+		"learning_rate": learning_rate
+	};
+}
+
+function add_layer(const network: object, const length: int, const a_func: func_type) -> void
+{
+	if (!network["layers"].length)
+	{
+		network["layers"].append(init_layer(
+			network["input_len"],
+			length,
+			a_func
+		));
+	}
+	else
+	{
+		network["layers"].append(init_layer(
+			network["layers"][network["layers"].length - 1]["output_len"],
+			length,
+			a_func
+		));
+	}
+}
+
+function backprop_output(const layer: object,
+						 const output_neurons: array, 
+						 const input_neurons: array,
+						 const error: array, 
+						 const learning_rate: float) -> float
+{
+	let sum: float = 0.0;
+	const df: func_type = get_derivative(layer["a_func"]);
+
+	for (let i: int = 0; i < layer["output_len"]; i = i + 1)
+	{
+		layer["biases"][i] = layer["biases"][i] + learning_rate * df(output_neurons[i]) * error[i];
+		for (let j: int = 0; j < layer["input_len"]; j = j + 1)
+		{
+			sum = sum + layer["weights"][i][j] * df(output_neurons[i]) * error[i];
+			layer["weights"][i][j] = learning_rate * df(output_neurons[i]) * input_neurons[j] * error[i];
+		}
+	}
+	
+	return sum;
+}
+
+function backprop_hidden(const layer: object,
+				  const output_neurons: array, const input_neurons: array,
+				  const error: float, const learning_rate: float) -> float
+{
+	const sum: float = 0.0;
+	const df: func_type = get_derivative(layer["a_func"]);
+
+	for (let i: int = 0; i < layer["output_len"]; i = i + 1)
+	{
+		layer["biases"][i] = layer["biases"][i] + learning_rate * df(output_neurons[i]) * error;
+		
+		for (let j: int = 0; j < layer["input_len"]; j = j + 1)
+		{
+			sum = sum + layer["weights"][i][j] * df(output_neurons[i]) * input_neurons[j] * error;
+			layer["weights"][i][j] = learning_rate * df(output_neurons[i]) * input_neurons[j] * error;
+		}
+	}
+
+	return sum;
+}
+
+function train(const network: object, 
+			   const input_layer: array,
+			   const answer: array) -> float
+{
+	if (network["layers"].length == 0)
+		return 0.0;
+	
+	const last_layer: object = network["layers"][network["layers"].length - 1];
+	
+	
+	let neurons: array = [];
+	
+	neurons.append(input_layer);
+	
+	for (let i: int = 1; i <= network["layers"].length; i = i + 1)
+	{
+		neurons.append(activate_layer(network["layers"][i - 1], neurons[i - 1]));
+	}
+
+	
+	let to_calc_cost: array = [0.0] * last_layer["output_len"];
+	let error: array = [0.0] * last_layer["output_len"];
+	let sum: float;
+
+
+	for (let i: int = 0; i < last_layer["output_len"]; i = i + 1)
+	{
+		error[i] = -1.0 * (neurons[neurons.length - 1][i] - answer[i]);
+		to_calc_cost[i] = 0.5 * (neurons[neurons.length - 1][i] - answer[i]) * (neurons[neurons.length - 1][i] - answer[i]);
+	}
+
+	sum = backprop_output(
+		last_layer,
+		neurons[neurons.length - 1],
+		neurons[network["layers"].length - 1],
+		error,
+		network["learning_rate"]
+	);
+
+	for (let k: int = network["layers"].length - 2; k >= 0; k = k - 1)
+	{
+		sum = backprop_hidden(network["layers"][k],
+							  neurons[k + 1],
+							  neurons[k],
+							  sum,
+							  network["learning_rate"]);
+	}
+	
+	let cost: float = 0.0;
+
+	for (let i: int = 0; i < to_calc_cost.length; i = i + 1)
+	{
+		cost = cost + to_calc_cost[i];
+	}
+	
+	return cost;
+}
+
+function predict(const network: object,
+				 let input_layer: array) -> array
+{
+	for (let i: int = 0; i < network["layers"].length; i = i + 1)
+	{
+		input_layer = activate_layer(network["layers"][i], input_layer);
+	}
+
+	return input_layer;
+}
+
+function relu(const x: float) -> float
+{	
+	if (x < 0)
+		return 0;
+	return x;
+}
+
+function _tanh(const x: float) -> float
+{
+	return tanh(x);
+}
+
+function drelu(const x: float) -> float
+{
+	return (x < 0) + 0.0;
+}
+
+function dtanh(const x: float) -> float
+{
+	const y: float = tanh(x);
+	return 1 - y * y;
+}
+
+function get_derivative(const f: func_type) -> func_type
+{
+	if (f == relu)
+		return drelu;
+	if (f == tanh) 
+		return dtanh;
+}
+
+function main() -> void
+{
+	const network: object = init_network(3, 0.1);
+
+	add_layer(network, 2, tanh);
+	
+	const inputs: array = [
+		[1.0, 1.0, 1.0],
+		[0.0, 1.0, 0.0],
+		[0.0, 0.0, 0.0]
+	];
+
+	const answers: array = [
+		[1.0, 0.0],
+		[1.0, 1.0],
+		[0.0, 0.0]
+	];
+
+	for (let i: int = 0; i < 1000; i = i + 1)
+	{
+		for (let j: int = 0; j < inputs.length; j = j + 1)
+		{
+			const error: float = train(network, inputs[j], answers[j]);
+			print("error: ", error);
+		
+	}
+	
+	for (let i: int = 0; i < inputs.length; i = i + 1)
+	{
+		const output: array = predict(network, inputs[i]);
+		print("output: ", output, " : ", answers[i]);
+	}
+	
+}
+
+main();
