@@ -2,11 +2,11 @@
 
 namespace lexical
 {
+	/// <summary>
+	/// enum for all the token types
+	/// </summary>
 	enum class token_type
 	{
-		//maybe remove this
-		TOKEN_ERROR = 0,
-
 		//identifiers
 		IDENTIFIER = -1,
 
@@ -40,9 +40,6 @@ namespace lexical
 		STRING_LITERAL = -34,
 		BOOL_LITERAL = -44,
 
-		//maybe remove this
-		CONSTANT = -5,
-
 		//keywords
 		IF_KEYWORD = -06,
 		ELSE_KEYWORD = -16,
@@ -57,10 +54,6 @@ namespace lexical
 
 		LET_KEYWORD = -86,
 		CONST_KEYWORD = -96,
-
-		// maybe remove these
-		PUNCTUATOR = -7,
-		SPEICAL_CHAR = -8,
 
 		// eof
 		_EOF = -9,
