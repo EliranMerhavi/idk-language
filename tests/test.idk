@@ -1,0 +1,23 @@
+
+
+function human_print_age(const human: object) -> void
+{
+	print(human.age);
+}
+
+function init_human(const name: string, const age: int, const id: int) -> object
+{
+	return {
+		"name": name,
+		"age": age,
+		"id": id
+	};
+}
+
+function main() -> void
+{
+	const human: object = init_human("tom", 25, 2222);
+	human_print_age(human);
+}
+
+main();
