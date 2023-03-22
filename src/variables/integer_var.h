@@ -2,6 +2,9 @@
 
 #include "abstract_var.h"
 
+/// <summary>
+/// this class represent the integer data type
+/// </summary>
 class integer_var : public abstract_var
 {
 public:

@@ -2,6 +2,9 @@
 
 #include "abstract_var.h"
 
+/// <summary>
+/// this class represent the boolean data type
+/// </summary>
 class bool_var: public abstract_var
 {
 public:

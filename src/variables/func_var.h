@@ -6,6 +6,10 @@
 #include "syntax/ast.h"
 
 #define INFINITE_ARGS_SIZE UINT64_MAX
+
+/// <summary>
+/// this class represent the function data type
+/// </summary>
 class func_var : public abstract_var
 {
 	using func_value_raw_t = std::shared_ptr<abstract_var>(*)(execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args);

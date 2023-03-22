@@ -13,6 +13,11 @@ namespace execution
 	class executer;
 }
 
+/// <summary>
+/// base class for any type of variable
+/// note that default operator overloading 
+/// is throwing an exception for unsupported operator
+/// </summary>
 class abstract_var
 {
 public:
@@ -92,7 +97,9 @@ public:
 		return this->identifier;
 	}
 
-	/// <summary>check if *this = 0</summary>
+	/// <summary>
+	/// check if *this = 0
+	/// </summary>
 	/// <returns>true if the variable is equal to the number 0 otherwise false </returns>
 	virtual auto is_not_zero() const -> bool;
 private:

@@ -2,6 +2,9 @@
 
 #include "abstract_var.h"
 
+/// <summary>
+/// this class represent the object data type
+/// </summary>
 class object_var : public abstract_var
 {
 	using members_t = std::unordered_map<std::string, std::shared_ptr<abstract_var>>;

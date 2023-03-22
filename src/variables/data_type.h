@@ -2,6 +2,10 @@
 
 #include <string>
 
+/// <summary>
+/// list for all the data types
+/// that the language supports
+/// </summary>
 enum class data_type
 {
 	INTEGER,

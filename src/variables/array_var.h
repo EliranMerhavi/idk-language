@@ -4,6 +4,9 @@
 
 class bool_var;
 
+/// <summary>
+/// this class represent the array data type
+/// </summary>
 class array_var : public abstract_var
 {
 	using members_t = std::unordered_map<std::string, std::shared_ptr<abstract_var>>;

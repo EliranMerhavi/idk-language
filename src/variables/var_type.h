@@ -2,10 +2,13 @@
 
 #include <string>
 
+/// <summary>
+/// the variable types
+/// </summary>
 enum class var_type
 {
-	LET,
-	CONST
+	LET, // mutable
+	CONST // immutable
 };
 
 inline auto var_type_from_string(const std::string& str) -> var_type

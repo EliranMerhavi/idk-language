@@ -1,6 +1,14 @@
 #include "pch.h"
 #include "object_var.h"
 #include "var_utils.h"
+#include "array_var.h"
+#include "string_var.h"
+#include "bool_var.h"
+#include "float_var.h"
+#include "integer_var.h"
+#include "func_var.h"
+#include "void_var.h"
+#include "var_utils.h"
 
 object_var::object_var(const map_t& value, var_type v_type) : 
 	abstract_var(v_type, data_type::OBJECT),
@@ -64,6 +72,9 @@ auto object_var::operator+(const std::shared_ptr<abstract_var>& other) const -> 
 		res = std::make_shared<object_var>(res_value);
 		break;
 	}
+	case data_type::STRING:
+		res = std::make_shared<string_var>((std::string)*this + static_cast<string_var*>(other.get())->value);
+		break;
 	default:
 		res = __super::operator+(other);
 		break;

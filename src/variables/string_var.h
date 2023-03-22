@@ -1,6 +1,9 @@
 #pragma once
 #include "abstract_var.h"
 
+/// <summary>
+/// this class represent the string data type
+/// </summary>
 class string_var : public abstract_var
 {
 	using members_t = std::unordered_map<std::string, std::shared_ptr<abstract_var>>;

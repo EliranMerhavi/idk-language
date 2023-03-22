@@ -22,25 +22,13 @@ auto string_var::operator=(const std::shared_ptr<abstract_var>& other) -> void
     switch (other->get_data_type())
     {
     case data_type::INTEGER:
-        this->value = (std::string) * static_cast<integer_var*>(other.get());
-        break;
     case data_type::FLOAT:
-        this->value = (std::string) * static_cast<float_var*>(other.get());
-        break;
     case data_type::BOOL:
-        this->value = (std::string) * static_cast<bool_var*>(other.get());
-        break;
     case data_type::ARRAY:
-        this->value = (std::string) * static_cast<array_var*>(other.get());
-        break;
     case data_type::OBJECT:
-        throw std::exception("unsupported yet");
-        break;
     case data_type::FUNCTION:
-        this->value = (std::string) * static_cast<func_var*>(other.get());
-        break;
     case data_type::STRING:
-        this->value = static_cast<string_var*>(other.get())->value;
+        this->value = (std::string)*other;
         break;
     default:
         __super::operator=(other);
@@ -54,25 +42,13 @@ auto string_var::operator+(const std::shared_ptr<abstract_var>& other) const -> 
     switch (other->get_data_type())
     {
     case data_type::STRING:
-        res = std::make_shared<string_var>(this->value + static_cast<string_var*>(other.get())->value);
-        break;
     case data_type::INTEGER:
-        res = std::make_shared<string_var>(this->value + (std::string) * static_cast<integer_var*>(other.get()));
-        break;
     case data_type::FLOAT:
-        res = std::make_shared<string_var>(this->value + (std::string) * static_cast<float_var*>(other.get()));
-        break;
     case data_type::BOOL:
-        res = std::make_shared<string_var>(this->value + (std::string) * static_cast<bool_var*>(other.get()));
-        break;
     case data_type::ARRAY:
-        res = std::make_shared<string_var>(this->value + (std::string) * static_cast<array_var*>(other.get()));
-        break;
     case data_type::OBJECT:
-        throw std::exception("unsupported yet");
-        break;
     case data_type::FUNCTION:
-        throw std::exception("unsupported yet");
+        res = std::make_shared<string_var>(this->value + (std::string)*other);
         break;
     default:
         res = __super::operator+(other);
