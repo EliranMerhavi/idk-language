@@ -63,17 +63,16 @@ namespace execution
 						break;
 
 					default:
-						throw interpeter_error(("cant input data type: '" + data_type_to_string(var->get_data_type()) + "'").c_str(), RUNTIME_ERROR);
+						return std::make_shared<bool_var>(false);
 						break;
 					}
 				}
 				catch (const interpeter_error&)
 				{
-					throw interpeter_error(("couldnt convert value '" + line + "' to data type '" +
-						data_type_to_string(var->get_data_type())).c_str(), RUNTIME_ERROR);
+					return std::make_shared<bool_var>(false);
 				}
 
-				return void_var::instance();
+				return std::make_shared<bool_var>(true);
 			}, "input", 1);
 
 			globals["rand"] = std::make_shared<func_var>([](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {

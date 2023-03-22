@@ -7,6 +7,8 @@
 #include "variables/float_var.h"
 #include "variables/abstract_var.h"
 #include "variables/func_var.h"
+#include "variables/array_var.h"
+#include "variables/object_var.h"
 #include "variables/var_utils.h"
 
 namespace execution
@@ -34,17 +36,17 @@ namespace execution
 		}
 		catch (const interpeter_error& e)
 		{
-			cout << e.msg << '\n';
+			std::cerr << e.msg << '\n';
 		}
 		catch (const std::exception& e)
 		{
-			cout << e.what() << '\n';
+			std::cerr << e.what() << '\n';
 		}
 	}
 
 	auto executer::execute(const std::vector<std::string>& source) -> void
 	{
-		const unique_ptr<ast::expr>& program_node = parser.parse_program(source);
+		const std::unique_ptr<ast::expr>& program_node = parser.parse_program(source);
 		
 		try
 		{
@@ -55,7 +57,7 @@ namespace execution
 			// print stacktrace
 			while (!call_stack.empty())
 			{
-				cout << "in function: " << call_stack.top() << '\n';
+				std::cerr << "in function: " << call_stack.top() << '\n';
 				call_stack.pop();
 			}
 			throw e;
@@ -64,7 +66,7 @@ namespace execution
 
 	auto executer::execute_program(const ast::program_expr* program_node) -> void
 	{
-		for (const unique_ptr<ast::expr>& statement : program_node->body)
+		for (const std::unique_ptr<ast::expr>& statement : program_node->body)
 			execute_statement(statement.get());
 	}
 
@@ -84,11 +86,6 @@ namespace execution
 
 		call_stack.pop();
 		memory.pop_scope();
-	}
-
-	auto executer::execute_function_declaration(const ast::function_declaration_expr* node) -> void
-	{
-		memory.create_var(node->identifier, std::make_shared<func_var>(node, var_type::CONST));
 	}
 
 	auto executer::execute_statement_or_block(const ast::expr* node) -> void
@@ -353,9 +350,18 @@ namespace execution
 			break;
 
 		case ast::expr_type::CALL_EXPR:
-			res = eval_call((ast::call_expr*)node);
-			break;
+		{
+			std::vector<std::shared_ptr<abstract_var>> evaled_args;
+			
+			const ast::call_expr* call_node = (ast::call_expr*)node;
+			const std::shared_ptr<abstract_var> callee = eval(call_node->callee.get());
 
+			for (const std::unique_ptr<ast::expr>& arg_node : call_node->args)
+				evaled_args.emplace_back(eval(arg_node.get()));
+			
+			res = (*callee)(*this, evaled_args);
+			break;
+		}
 		case ast::expr_type::MEMBER_ACCESS_EXPR:
 		{
 			const ast::member_access_expr* access_node = (ast::member_access_expr*)node;
@@ -379,18 +385,5 @@ namespace execution
 		}
 		
 		return res;
-	}
-
-	auto executer::eval_call(const ast::call_expr* node) -> std::shared_ptr<abstract_var>
-	{
-		const std::shared_ptr<abstract_var> callee = eval(node->callee.get());
-		
-		std::vector<std::shared_ptr<abstract_var>> evaled_args;
-		for (const std::unique_ptr<ast::expr>& arg_node : node->args)
-		{
-			evaled_args.emplace_back(eval(arg_node.get()));
-		}
-
-		return (*callee)(*this, evaled_args);
 	}
 }
