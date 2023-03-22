@@ -1,9 +1,13 @@
+// common type definition for the project
 #pragma once
 
 #include <stdint.h>
 
 using ldouble_t = long double;
 
+/// <summary>
+/// types of exception errors
+/// </summary>
 enum error_t
 {
 	LEXICAL_ERROR,
@@ -30,10 +34,13 @@ inline auto error_t_to_string(error_t type) -> std::string
 	return res;
 }
 
+/// <summary>
+/// struct that represenst all types of interpeter error
+/// </summary>
 struct interpeter_error
 {
 	std::string msg;
-	
+	error_t type;
 	interpeter_error(const std::string& msg, error_t type);
 };
 
