@@ -5,10 +5,17 @@
 #include "variables/var_type.h"
 #include "lexical/token_type.h"
 
-using namespace std;
 
+/// <summary>
+/// this namespace contains all the ast (abstract syntax tree) node types
+/// </summary>
 namespace ast
 {
+	using namespace std;
+
+	/// <summary>
+	/// ast node types
+	/// </summary>
 	enum class expr_type
 	{
 		PROGRAM_EXPR,
@@ -37,31 +44,28 @@ namespace ast
 
 
 	// list of all the ast node types
+
 	struct expr; // abstract class
 
 	struct program_expr;
-
-	struct function_declaration_expr;
-
-	struct variable_declaration_expr;
-
 	struct block_expr;
-
+	// statement nodes
+	struct function_declaration_expr;
+	struct variable_declaration_expr;
 	struct if_expr;
 	struct while_expr;
 	struct for_expr;
-	// only in function scope
+	// function scope nodes
 	struct return_expr;
-	// only in loop scope
+	// loop scope nodes
 	struct break_expr;
 	struct continue_expr;
-
+	// evaluable expression nodes
 	struct binary_expr;
 	struct unary_expr;
 	struct call_expr;
 	struct member_access_expr;
 	struct index_access_expr;
-
 	struct identifier_expr;
 	//literals
 	struct string_literal_expr;
@@ -72,19 +76,17 @@ namespace ast
 	struct object_literal_expr;
 		
 	// implemention
-
 	struct expr
 	{
 		expr_type type = (expr_type)-1;
 
-		//virtual ~expr() = 0;
+		//virtual ~expr() = 0; // couldnt make this word
 	};
 
 	struct program_expr : expr
 	{
 		vector<unique_ptr<expr>> body;
 	};
-
 	
 	struct function_declaration_expr : expr
 	{

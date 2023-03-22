@@ -579,9 +579,11 @@ namespace syntax
 	{
 		unique_ptr<ast::string_literal_expr> node = make_unique<ast::string_literal_expr>();
 
-		const string value = eat(lexical::token_type::STRING_LITERAL).lexem;
-
-		node->value = value.substr(1, value.size() - 2);
+		string value = eat(lexical::token_type::STRING_LITERAL).lexem;
+		value = value.substr(1, value.size() - 2);
+		value = utils::str::escape(value);
+		
+		node->value = value;
 		node->type = ast::expr_type::STRING_LITERAL_EXPR;
 
 		return node;
@@ -657,10 +659,20 @@ namespace syntax
 		return temp;
 	}
 
-
 	auto parser::eat(lexical::token_type token_type) -> lexical::token
 	{
-		interpeter_assert(lookahead.type == token_type, ("unexpected token! at line: " + to_string(lookahead.line)).c_str(), SYNTAX_ERROR);
+		if (lookahead.type != token_type)
+		{
+			switch (token_type)
+			{
+			case (lexical::token_type)';':
+				throw interpeter_error(("expected ; in end of line " + to_string(tokenizer.current_line() - 1)).c_str(), SYNTAX_ERROR);
+				break;
+			default:
+				throw interpeter_error(("unexpected token! at line: " + to_string(lookahead.line)).c_str(), SYNTAX_ERROR);
+				break;
+			}
+		}	
 			
 		const lexical::token token = lookahead;
 		
@@ -722,20 +734,5 @@ namespace syntax
 		}
 
 		return res;
-	}
-
-	auto parser::enter_scope(scope_type scope) -> void
-	{
-		scopes[scope].push(true);
-	}
-
-	auto parser::exit_scope(scope_type scope) -> void
-	{
-		scopes[scope].pop();
-	}
-
-	auto parser::is_in_scope(scope_type scope) -> bool
-	{
-		return !scopes[scope].empty();
 	}
 }
