@@ -1,4 +1,5 @@
-info/
+to-ignore/
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.sln
