@@ -19,7 +19,7 @@ auto main(int argc, char** argv) -> int
 	{
 		std::cout << "[ENTERED TESTING MODE]\n";
 		execution::executer executer;
-		executer.execute_file("res/test.idk");
+		executer.execute_file("tests/test.idk");
 		//interpeter_mode();
 	}
 	else if (argc == 2 && !strcmp(argv[1], "-h"))
