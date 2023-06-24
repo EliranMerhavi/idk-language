@@ -20,18 +20,18 @@ object_var::object_var(const map_t& value, var_type v_type) :
 	}
 
 	this->members["length"] = std::make_shared<func_var>(
-		[=](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+		[this](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
 			return std::make_shared<integer_var>(this->value.size());
 		}, "object.append", 0);
 
 	this->members["put"] = std::make_shared<func_var>(
-		[=](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+		[this](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
 			this->value[args[0]] = init_var(args[1]->get_data_type(), var_type::LET, args[1]);
 			return void_var::instance();
 		}, "object.append", 2);
 
 	this->members["erase"] = std::make_shared<func_var>(
-		[=](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+		[this](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
 			this->value.erase(args[0]);
 			return void_var::instance();
 		}, "object.append", 1);

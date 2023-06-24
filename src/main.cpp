@@ -15,14 +15,7 @@
 auto main(int argc, char** argv) -> int
 {
 	srand(time(NULL));
-	if (argc == 1) // currently its a testing mode
-	{
-		std::cout << "[ENTERED TESTING MODE]\n";
-		execution::executer executer;
-		executer.execute_file("tests/test.idk");
-		//interpeter_mode();
-	}
-	else if (argc == 2 && !strcmp(argv[1], "-h"))
+	if (argc == 2 && !strcmp(argv[1], "-h"))
 	{
 		std::cout << 
 			"[ENTERED HELP MODE]\n"

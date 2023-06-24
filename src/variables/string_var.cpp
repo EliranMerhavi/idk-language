@@ -11,7 +11,7 @@ string_var::string_var(const std::string& value, var_type v_type) :
     value(value)
 {
     this->members["length"] = std::make_shared<func_var>(
-        [=](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+        [this](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
             return std::make_shared<integer_var>(this->value.size());
         }, "string.append", 0);
 }

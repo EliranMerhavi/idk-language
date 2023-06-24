@@ -79,6 +79,9 @@ namespace execution
 			memory.create_var(identifier, value);
 		
 		execute_block((ast::block_expr*)func_node->body.get());
+
+		if (!return_value) // there was no return statement with a return value in the function's block
+			return_value = void_var::instance();
 		
 		interpeter_assert(return_value->get_data_type() == func_node->return_type, ("unmatching return value type expected '" +
 			data_type_to_string(func_node->return_type) + "', got '" + data_type_to_string(return_value->get_data_type()) + "'").c_str(),
@@ -122,7 +125,6 @@ namespace execution
 			return_value_flag = false;
 		if (continue_flag)
 			continue_flag = false;
-
 	}
 
 	auto executer::execute_statement(const ast::expr* node) -> void
@@ -186,8 +188,9 @@ namespace execution
 		}
 		case ast::expr_type::RETURN_EXPR:
 		{
-			const ast::expr* return_value_node = ((ast::return_expr*)node)->return_value.get();			
-			return_value = return_value_node ? eval(return_value_node) : void_var::instance();			
+			const ast::expr* return_value_node = ((ast::return_expr*)node)->return_value.get();	
+			if (return_value_node)
+				return_value = eval(return_value_node);
 			return_value_flag = true;
 			break;
 		}

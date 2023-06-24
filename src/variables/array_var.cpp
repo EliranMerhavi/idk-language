@@ -19,18 +19,18 @@ array_var::array_var(const array_t& value, var_type v_type) :
     }
 
     this->members["length"] = std::make_shared<func_var>(
-        [=](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+        [this](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
             return std::make_shared<integer_var>(this->value.size());
         }, "array.append", 0);
 
     this->members["append"] = std::make_shared<func_var>(
-        [=](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+        [this](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
             this->value.push_back(args.front());
             return void_var::instance();
         }, "array.append", 1);
 
     this->members["remove_at"] = std::make_shared<func_var>(
-        [=](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+        [this](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
 
             size_t index_val = to_index_val(args.front());
             std::shared_ptr<abstract_var> res = this->value[index_val];

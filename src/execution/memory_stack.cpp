@@ -83,6 +83,10 @@ namespace execution
 				return std::make_shared<float_var>(tanh((ldouble_t)*args[0]));
 			}, "tanh", 1);
 
+			globals["pow"] = std::make_shared<func_var>([](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+				return std::make_shared<float_var>(pow((ldouble_t)*args[0], (ldouble_t)*args[1]));
+			}, "tanh", 2);
+
 			is_globals_initialized = true;
 		}
 	}

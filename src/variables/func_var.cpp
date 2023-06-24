@@ -16,7 +16,7 @@ func_var::func_var(const ast::function_declaration_expr* value, var_type v_type)
 {
     if (value)
     {
-        this->value = [=](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
+        this->value = [this, value](execution::executer& executer, const std::vector<std::shared_ptr<abstract_var>>& args) {
             std::unordered_map<std::string, std::shared_ptr<abstract_var>> args_with_names;
 
             for (size_t i = 0; i < args.size(); i++)

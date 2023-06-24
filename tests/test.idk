@@ -1,23 +1,11 @@
 
-
-function human_print_age(const human: object) -> void
-{
-	print(human.age);
+function hello() -> void {
+	print("hello");
 }
 
-function init_human(const name: string, const age: int, const id: int) -> object
-{
-	return {
-		"name": name,
-		"age": age,
-		"id": id
-	};
-}
+let arr: array = [];
 
-function main() -> void
-{
-	const human: object = init_human("tom", 25, 2222);
-	human_print_age(human);
-}
+arr.append(5);
 
-main();
+print("string " + arr);
+hello();
