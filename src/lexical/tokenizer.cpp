@@ -78,6 +78,7 @@ namespace lexical
 			{ std::regex("^:"), (token_type)':'	},
 			{ std::regex("^\\,"), (token_type)',' },
 			{ std::regex("^\\."), (token_type)'.' },
+			
 			// identifier
 			{ std::regex("^\\w+"), token_type::IDENTIFIER },
 		};
@@ -140,7 +141,7 @@ namespace lexical
 	auto tokenizer::skip_white_spaces_and_comments() -> void
 	{
 		bool skip_flag = true;
-
+	
 		while (!eof() && skip_flag)
 		{
 			char ch = source[cursor];
@@ -160,29 +161,31 @@ namespace lexical
 					}
 				}
 				break;
-			case '!':
-				if (cursor + 1 >= source.size() || source[cursor + 1] != '!')
+			case '#':
+			{
+				interpeter_assert(cursor != source.size() && source[cursor + 1] == '#', "missing end of multiline comment", LEXICAL_ERROR);
+
+				advance_cursor(2);
+				bool in_comment = true;
+				
+				while (in_comment)
 				{
-					skip_flag = false;
-				}
-				else
-				{
-					advance_cursor(2);
-					bool in_comment = true;
-					while (!eof() && in_comment)
-					{
-						char ch1 = source[cursor];
+					char ch1 = source[cursor];
+
+					advance_cursor(1);
+
+					interpeter_assert(!eof(), "missing end of multiline comment", LEXICAL_ERROR);
+
+					char ch2 = source[cursor];
+
+					if (ch1 == '#' && ch2 == '#') 
+					{ 
 						advance_cursor(1);
-
-						interpeter_assert(!eof(), "missing end of multiline comment", LEXICAL_ERROR);
-
-						char ch2 = source[cursor];
-
-						if (ch1 == '!' && ch2 == '!') // end of commment
-							in_comment = false;
+						in_comment = false;
 					}
 				}
 				break;
+			}
 			case ' ':
 			case '\t':
 				advance_cursor(1);

@@ -1,11 +1,8 @@
 
-function hello() -> void {
-	print("hello");
-}
+## this is comment ## 
 
-let arr: array = [];
+let b: int = 5;
+let a: int = !!b;
 
-arr.append(5);
 
-print("string " + arr);
-hello();
+print(a);

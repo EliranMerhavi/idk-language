@@ -24,8 +24,8 @@ here is the syntax for some basic statements and expression:
 #### comments
 ```	
 	?? on line comment
-	!! multi line
-		comment !!
+	## multi line
+		comment ##
 
 ```
 
@@ -34,7 +34,7 @@ here is the syntax for some basic statements and expression:
 	let mutable_var: int = 5;
 	const immutable_var: string = "hello world";
 
-	!! immutable_var = "something"; will throw an error (cant change const variables)
+	## immutable_var = "something"; will throw an error (cant change const variables)
 ```
 
 #### function declaration
@@ -43,18 +43,18 @@ as the return type.
 ```
 function func_name(const arg0: int, let arg1: float) -> int
 {
-	!! body of the function !!
-	return !! expression !!;
+	## body of the function ##
+	return ## expression ##;
 }
 
 function void_function(const arg0: int, let arg1: float) -> void
 {
-	!! body of the function !!
+	## body of the function ##
 }
 ```
 #### if / else 
 ```
-	if (!! expression !!) 
+	if (## expression ##) 
 	{
 
 	} 
@@ -73,7 +73,7 @@ someone neeed a reminder:
 here are the supported loops in the language:
 ##### while loop
 ```
-	while (!! expression !!)
+	while (## expression ##)
 	{
 
 	}
@@ -81,7 +81,7 @@ here are the supported loops in the language:
 #### for loop
 ```
 	for (let i: int = 0; i < 10; i = i + 1) {
-		!! statements !!
+		## statements ##
 	}
 ```
 ### expressions
@@ -90,9 +90,9 @@ here are the supported operators in the language:
 * the operators are ordered by precedence
 1.  ~   - bitwise negate
 2.  !   - logical negate
-3.  -   - subtraction
-4.  +   - addition
-5.  *   - multiplication
+3.  \-   - subtraction
+4.  \+   - addition
+5.  \*   - multiplication
 6.  /   - division
 7.  ==  - equal
 8.  !=  - not equal

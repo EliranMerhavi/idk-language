@@ -15,6 +15,7 @@
 auto main(int argc, char** argv) -> int
 {
 	srand(time(NULL));
+	
 	if (argc == 2 && !strcmp(argv[1], "-h"))
 	{
 		std::cout << 
