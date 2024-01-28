@@ -23,7 +23,7 @@ here is the syntax for some basic statements and expression:
 
 #### comments
 ```	
-	?? on line comment
+	?? one line comment
 	## multi line
 		comment ##
 
